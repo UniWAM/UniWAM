@@ -1,8 +1,8 @@
-# OLA-SEM Policy Evaluation on RoboTwin
+# UniWAM Policy Evaluation on RoboTwin
 
-This guide explains how to deploy and evaluate OLA-SEM on RoboTwin 2.0. The
-policy directory keeps the internal name `Motus` for compatibility with
-RoboTwin and existing checkpoints.
+This guide explains how to deploy and evaluate UniWAM (OLA-SEM) on RoboTwin 2.0.
+The policy directory and RoboTwin policy name are `uniwam`. The underlying
+Motus model classes are retained, and checkpoint loading is unchanged.
 
 ## Environment
 
@@ -13,7 +13,7 @@ may differ.
 After activating the RoboTwin environment, install the policy dependencies:
 
 ```bash
-cd /path/to/OLA-Sem/inference/robotwin/Motus
+cd /path/to/OLA-Sem/inference/robotwin/uniwam
 pip install -r requirements.txt
 ```
 
@@ -22,9 +22,9 @@ pip install -r requirements.txt
 Copy the complete policy directory into RoboTwin:
 
 ```bash
-cp -a /path/to/OLA-Sem/inference/robotwin/Motus \
+cp -a /path/to/OLA-Sem/inference/robotwin/uniwam \
   /path/to/RoboTwin/policy/
-cd /path/to/RoboTwin/policy/Motus
+cd /path/to/RoboTwin/policy/uniwam
 cp paths_config.example.yml paths_config.yml
 ```
 
@@ -32,7 +32,7 @@ The deployed layout should include:
 
 ```text
 RoboTwin/
-├── policy/Motus/
+├── policy/uniwam/
 │   ├── deploy_policy.py
 │   ├── deploy_policy.yml
 │   ├── eval.sh
@@ -124,7 +124,7 @@ the future-video branch throughout the full inference schedule.
 Evaluate one task:
 
 ```bash
-cd /path/to/RoboTwin/policy/Motus
+cd /path/to/RoboTwin/policy/uniwam
 bash eval.sh hanging_mug
 ```
 

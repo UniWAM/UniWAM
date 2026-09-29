@@ -8,12 +8,12 @@ understanding, image generation, and action prediction.
 
 ## Contents
 
-- `models/`, `train/`, `utils/`, `bak/wan/`: LAP model and training runtime.
+- `models/`, `train/`, `utils/`, `bak/wan/`: physical language model and training runtime.
 - `data/robotwin2/`: RoboTwin loader and conversion utilities (code only).
-- `configs/`: RoboTwin LAP, IDM, history-flow, and future-noise examples.
-- `inference/robotwin/Motus/`: self-contained RoboTwin policy deployment.
+- `configs/`: RoboTwin physical language, IDM, history-flow, and future-noise examples.
+- `inference/robotwin/uniwam/`: self-contained RoboTwin policy deployment.
 
-Bridge, DROID, Fractal, LIBERO, and real-world inference are intentionally out
+Bridge, DROID, Fractal, and real-world inference are intentionally out
 of scope for this release.
 
 ## Installation
@@ -29,12 +29,15 @@ pip install flash-attn --no-build-isolation
 pip install -r requirements.txt
 ```
 
-Download the pretrained weights from:
+## Model weights
 
-- [Kosmos524/d0_v on ModelScope](https://www.modelscope.cn/models/Kosmos524/d0_v/files): weights supervised on mixed robot datasets for image, action, and text generation.
-- [Qwen3-VL-2B-Instruct on Hugging Face](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct)
-- [Wan2.2-TI2V-5B on Hugging Face](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B)
+### Pretrained assets for training
 
+Standard training uses the following pretrained assets:
+
+- [Kosmos524/d0_v on ModelScope](https://www.modelscope.cn/models/Kosmos524/d0_v/files): initialization weights supervised on mixed robot datasets. Use these weights to initialize training or fine-tuning; they are not the released RoboTwin evaluation checkpoint.
+- [Wan-AI/Wan2.2-TI2V-5B on Hugging Face](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B): Wan video backbone, VAE, and UMT5 components.
+- [Qwen/Qwen3-VL-2B-Instruct on Hugging Face](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct): vision-language backbone.
 
 Keep the downloaded directory structure as follows so that it matches the
 default paths in the training configs:
@@ -47,48 +50,41 @@ pretrained_models/
     └── Wan2.2_VAE.pth
 ```
 
-## RoboTwin data
+`d0_v` is the normal training initialization. Point the training
+fine-tuning checkpoint setting at `pretrained_models/d0_v/`.
 
-No data is checked into this repository. The default training path is
-`data/robotwin_dataset`. Prepare it with the Python utilities documented in
-[`data/robotwin2/robotwin_data_convert/README.md`](data/robotwin2/robotwin_data_convert/README.md),
-or point `dataset.dataset_dir` in a config at an existing converted dataset.
+## Post-training
 
-The loader expects `clean/` and/or `randomized/` task directories containing
-videos, qpos tensors, instruction metadata, and optional cached language
-features. The converter README contains the concrete tree.
+### RoboTwin
 
-## LAP training
+See the [RoboTwin post-training guide](docs/robotwin/README.md)
+for data preparation, training, and inference.
 
-Edit one of the YAML files in `configs/` to set the dataset and model paths,
-then run:
+#### Post-trained checkpoint for evaluation
 
-```bash
-CONFIG_FILE=configs/robotwin_lap.yaml \
-NUM_GPUS=8 \
-bash scripts/train_lap.sh
+Use the released
+[Kosmos524/ola_sem checkpoint on ModelScope](https://www.modelscope.cn/models/Kosmos524/ola_sem/files)
+for RoboTwin evaluation. It is separate from the `d0_v` training
+initialization and must retain this layout:
+
+```text
+pretrained_models/
+└── ola_sem/
+    ├── config.json
+    └── pytorch_model/
+        └── mp_rank_00_model_states.pt
 ```
 
-Useful overrides are `DEEPSPEED_CONFIG`, `OUTPUT_DIR`, `RUN_NAME`,
-`MASTER_ADDR`, `MASTER_PORT`, and `REPORT_TO`. Available examples include:
+Set the inference `checkpoint_path` to
+`pretrained_models/ola_sem/pytorch_model/`. The adjacent `config.json` records
+the released history-flow contract: `flow_source.mode=history`,
+`video_mode=gaussian`, `action_noise_std=0.02`, and `history_length=16`.
+Evaluation uses four denoising steps. See the RoboTwin inference guide for the
+complete deployment and evaluation configuration.
 
-- `robotwin_lap.yaml`: standard LAP training.
-- `robotwin_lap_clean.yaml`: clean split.
-- `robotwin_lap_history_flow*.yaml`: executed-qpos history as action source.
-- `robotwin_lap_future_noise.yaml`: history initialization with future-video
-  noise augmentation.
+### LIBERO
 
-Set `resume.checkpoint_path` for a full Accelerator/DeepSpeed state, or
-`finetune.checkpoint_path` for model-weight initialization. Training writes a
-`config.json` beside exported model weights. History-flow inference requires
-that metadata and validates `flow_source.mode`, `video_mode`, and
-`history_length` against the action chunk size.
-
-## RoboTwin inference
-
-See the [RoboTwin inference guide](inference/robotwin/Motus/README.md) for setup
-and configuration.
-
+Coming soon.
 
 ## Acknowledgements
 

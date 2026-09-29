@@ -64,7 +64,7 @@ for required_name in ROBOTWIN_ROOT CHECKPOINT_PATH WAN_PATH VLM_PATH; do
         exit 1
     fi
 done
-DEPLOYED_POLICY_DIR="$ROBOTWIN_ROOT/policy/Motus"
+DEPLOYED_POLICY_DIR="$ROBOTWIN_ROOT/policy/uniwam"
 if [[ ! -f "$DEPLOYED_POLICY_DIR/deploy_policy.yml" ]]; then
     echo "Error: deploy this directory to $DEPLOYED_POLICY_DIR first." >&2
     exit 1
@@ -95,13 +95,13 @@ echo "Evaluating $TASK_NAME on GPU $GPU_ID (mode=$INFERENCE_MODE)"
 set +e
 PYTHONWARNINGS=ignore::UserWarning \
 python script/eval_policy.py \
-    --config "policy/Motus/deploy_policy.yml" \
+    --config "policy/uniwam/deploy_policy.yml" \
     --overrides \
     --task_name "$TASK_NAME" \
     --task_config "$TASK_CONFIG" \
     --ckpt_setting "$CHECKPOINT_PATH" \
     --seed "$SEED" \
-    --policy_name "Motus" \
+    --policy_name "uniwam" \
     --instruction_type "$INSTRUCTION_TYPE" \
     --log_dir "$LOG_DIR" \
     --wan_path "$WAN_PATH" \

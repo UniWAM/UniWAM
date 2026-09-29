@@ -5,4 +5,5 @@ Upstream project: https://github.com/thu-ml/Motus
 
 The retained Motus implementation and this derived release are distributed
 under the Apache License 2.0 included in LICENSE. OLA-SEM keeps the Motus Python
-class names and RoboTwin policy directory name for checkpoint compatibility.
+model class names for checkpoint compatibility. The RoboTwin deployment
+policy directory and policy name are uniwam.

@@ -1,4 +1,4 @@
-# Motus Policy for RoboTwin
+# UniWAM Policy for RoboTwin
 
 import torch
 import torch.nn as nn
@@ -36,9 +36,9 @@ from utils.image_utils import resize_with_padding
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-class MotusPolicy:
+class UniWAMPolicy:
     """
-    Motus Policy wrapper for RoboTwin evaluation.
+    UniWAM Policy wrapper for RoboTwin evaluation.
     Implements the joint video-action diffusion model for robotic control.
     """
     
@@ -120,7 +120,7 @@ class MotusPolicy:
             "Future video denoise fraction: %s",
             self.future_video_denoise_fraction,
         )
-        logger.info("Motus Policy initialized successfully")
+        logger.info("UniWAM Policy initialized successfully")
 
     def set_instruction(self, instruction: str):
         """Set the current instruction for the policy."""
@@ -493,7 +493,7 @@ def encode_obs(observation):
 
 def get_model(usr_args):
     """
-    Initialize Motus model.
+    Initialize the UniWAM policy.
     
     Args:
         usr_args: Arguments from eval script (must include wan_path and vlm_path)
@@ -518,7 +518,7 @@ def get_model(usr_args):
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
-    policy = MotusPolicy(
+    policy = UniWAMPolicy(
         checkpoint_path=checkpoint_path,
         wan_path=wan_path,
         vlm_path=vlm_path,
