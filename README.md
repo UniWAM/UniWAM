@@ -60,28 +60,6 @@ fine-tuning checkpoint setting at `pretrained_models/d0_v/`.
 See the [RoboTwin post-training guide](docs/robotwin/README.md)
 for data preparation, training, and inference.
 
-#### Post-trained checkpoint for evaluation
-
-Use the released
-[Kosmos524/ola_sem checkpoint on ModelScope](https://www.modelscope.cn/models/Kosmos524/ola_sem/files)
-for RoboTwin evaluation. It is separate from the `d0_v` training
-initialization and must retain this layout:
-
-```text
-pretrained_models/
-└── ola_sem/
-    ├── config.json
-    └── pytorch_model/
-        └── mp_rank_00_model_states.pt
-```
-
-Set the inference `checkpoint_path` to
-`pretrained_models/ola_sem/pytorch_model/`. The adjacent `config.json` records
-the released history-flow contract: `flow_source.mode=history`,
-`video_mode=gaussian`, `action_noise_std=0.02`, and `history_length=16`.
-Evaluation uses four denoising steps. See the RoboTwin inference guide for the
-complete deployment and evaluation configuration.
-
 ### LIBERO
 
 Coming soon.

@@ -43,5 +43,11 @@ that metadata and validates `flow_source.mode`, `video_mode`, and
 
 ## RoboTwin inference
 
+### Post-trained checkpoint for evaluation
+
+Use the released
+[Kosmos524/ola_sem checkpoint on ModelScope](https://www.modelscope.cn/models/Kosmos524/ola_sem/files)
+for RoboTwin evaluation.
+
 See the [RoboTwin inference guide](../../inference/robotwin/uniwam/README.md) for setup
 and configuration.
