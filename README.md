@@ -10,13 +10,12 @@
 ## Overview
 
 <p align="center">
-  <a href="../../figure/uniwam_teaser.pdf">
-    <img src="../../figure/uniwam_teaser.jpg" alt="UniWAM teaser" width="100%">
+  <a href="uniwam_teaser.pdf">
+    <img src="uniwam_teaser.jpg" alt="UniWAM teaser" width="100%">
   </a>
 </p>
 
-UniWAM brings semantic understanding, visual prediction, and action generation into one MoT architecture. Its three experts exchange information through joint multimodal attention. During pretraining, physical-language supervision and complementary signals from robot, human egocentric, and VQA data build embodied knowledge. During post-training, future visual noise augmentation reduces reliance on precise future predictions, while encoded action history initializes action generation through flow matching. The repository provides the RoboTwin training and deployment workflow.
-
+UniWAM brings semantic understanding, visual prediction, and action generation into one MoT architecture. Its three experts exchange information through joint multimodal attention. During pretraining, physical-language supervision and complementary signals from robot, human egocentric, and VQA data build embodied knowledge. During post-training, future visual noise augmentation reduces reliance on precise future predictions, while encoded action history initializes action generation through flow matching.
 
 
 ## Key Features
@@ -95,7 +94,6 @@ for their valuable open-source work and contribution to the community.
 
 ## Citation
 
-The paper is not publicly available yet, so its author list and arXiv identifier are not available. We will update this section when the preprint is released. For now, this entry is a placeholder and should not be used as a final bibliographic citation:
 
 ```bibtex
 @misc{uniwam,
