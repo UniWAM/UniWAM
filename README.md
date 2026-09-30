@@ -32,6 +32,7 @@ UniWAM brings semantic understanding, visual prediction, and action generation i
 
 - `models/`, `train/`, `utils/`, `bak/wan/`: physical language model and training runtime.
 - `data/robotwin2/`: RoboTwin loader and conversion utilities (code only).
+- `data/libero/`, `examples/libero_plus/`, `scripts/libero/`: LIBERO training and LIBERO/LIBERO-plus evaluation code.
 - `configs/`: RoboTwin physical language, IDM, history-flow, and future-noise examples.
 - `inference/robotwin/uniwam/`: self-contained RoboTwin policy deployment.
 
@@ -86,7 +87,10 @@ for data preparation, training, and inference.
 
 ### LIBERO
 
-Coming soon.
+See the [LIBERO guide](docs/libero/README.md) for original LIBERO training and
+separate original LIBERO / LIBERO-plus evaluation. LIBERO-plus training is not
+included. Benchmark environments, datasets, pretrained assets, and checkpoints
+are supplied separately by users.
 
 ## ❤️ Acknowledgements
 

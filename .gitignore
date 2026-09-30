@@ -15,6 +15,7 @@ venv/
 
 # Runtime data and generated metadata
 data/robotwin_dataset*/
+data/libero_dataset*/
 data/robotwin_raw_dataset*/
 data/processed*/
 data/raw*/

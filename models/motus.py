@@ -360,7 +360,7 @@ class UndModule(nn.Module):
             'past_key_values': None,
             'use_cache': False,
             'output_attentions': False,
-            'output_hidden_states': True,
+            'output_hidden_states': False,
             'return_dict': True
         }
 
@@ -376,11 +376,11 @@ class UndModule(nn.Module):
         if use_no_grad:#冻住vlm
             with torch.no_grad():
                 vlm_output = self.vlm_model.model.language_model(**vlm_kwargs)
-            last_layer_features = vlm_output.hidden_states[-1]  # [B, seq_len, vlm_dim]
+            last_layer_features = vlm_output.last_hidden_state  # [B, seq_len, vlm_dim]
         else:
             # logger.info("VLM grad enabled")
             vlm_output = self.vlm_model.model.language_model(**vlm_kwargs)
-            last_layer_features = vlm_output.hidden_states[-1]  # [B, seq_len, vlm_dim]
+            last_layer_features = vlm_output.last_hidden_state  # [B, seq_len, vlm_dim]
             if 'labels' in vlm_inputs:
                 # hidden_states = last_layer_features
                 logits = self.vlm_model.lm_head(last_layer_features)  
@@ -1145,9 +1145,10 @@ class Motus(nn.Module):
 
         # 2. Understanding Expert features and T5 context
         # Extract understanding features from VLM
-        und_tokens = self.und_module.extract_und_features(vlm_inputs)
-        if isinstance(und_tokens, tuple):
-            und_tokens = und_tokens[0]
+        base_und_tokens = self.und_module.extract_und_features(vlm_inputs)
+        if isinstance(base_und_tokens, tuple):
+            base_und_tokens = base_und_tokens[0]
+        und_k_lens = self._build_und_k_lens(vlm_inputs, base_und_tokens)
 
 
         # T5 preprocess
@@ -1170,11 +1171,8 @@ class Motus(nn.Module):
             registers = self.action_expert.registers.expand(B, -1, -1)  # [B, num_registers, dim]
             action_tokens = self.action_expert.input_encoder(state_tokens, action_latent, registers)
 
-            # Note: Understanding tokens already extracted before the loop, will be updated in joint attention
-            und_tokens = self.und_module.extract_und_features(vlm_inputs)  # [B, num_queries * num_layers, und_dim]
-            if isinstance(und_tokens, tuple):
-                und_tokens = und_tokens[0]
-            und_k_lens = self._build_und_k_lens(vlm_inputs, und_tokens)
+            # Reset VLM conditioning at each denoising step without rerunning the VLM.
+            und_tokens = base_und_tokens.clone()
 
             
             # Trimodal MoT forward - joint denoising for WAN, Action, Understanding

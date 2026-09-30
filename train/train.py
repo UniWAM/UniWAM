@@ -781,6 +781,8 @@ def main():
     
     # System settings
     parser.add_argument("--checkpoint_dir", type=str, default=None, help="Override checkpoint directory")
+    parser.add_argument("--dataset_dir", type=str, default=None, help="Override dataset directory")
+    parser.add_argument("--cache_dir", type=str, default=None, help="Override LIBERO cache directory")
     parser.add_argument("--log_level", type=str, default="INFO", help="Logging level")
     
     # Logging settings
@@ -798,6 +800,11 @@ def main():
     
     # Load configuration
     config = load_config(args.config)
+    if args.dataset_dir is not None:
+        config.dataset.dataset_dir = args.dataset_dir
+    if args.cache_dir is not None:
+        config.dataset.cache_dir = args.cache_dir
+        config.dataset.action_stats_path = os.path.join(args.cache_dir, "raw_osc_action_stats.json")
     if args.checkpoint_dir is not None:
         config.system.checkpoint_dir = args.checkpoint_dir
     if args.report_to is not None:

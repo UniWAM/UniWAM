@@ -7,11 +7,35 @@ import torch
 
 
 def create_dataset(config: OmegaConf, val: bool = False):
-    """Create the only dataset supported by this open-source subset: RoboTwin."""
+    """Create a RoboTwin or LIBERO training dataset."""
     dataset_type = config.dataset.get("type", "robotwin")
+    if dataset_type == "libero":
+        from .libero.libero_dataset import LiberoMotusDataset
+
+        params = {
+            "dataset_dir": config.dataset.dataset_dir,
+            "cache_dir": config.dataset.cache_dir,
+            "action_stats_path": config.dataset.action_stats_path,
+            "global_downsample_rate": config.common.global_downsample_rate,
+            "video_action_freq_ratio": config.common.video_action_freq_ratio,
+            "num_video_frames": config.common.num_video_frames,
+            "video_size": (config.common.video_height, config.common.video_width),
+            "target_action_dim": config.common.action_dim,
+            "val": val,
+            "include_history_actions": config.model.get("flow_source", {}).get("mode") == "history",
+            "history_action_length": config.model.get("flow_source", {}).get(
+                "history_length", config.common.num_video_frames * config.common.video_action_freq_ratio
+            ),
+            "vlm_checkpoint_path": config.model.vlm.checkpoint_path,
+        }
+        for name in ("val_fraction", "split_seed", "max_episodes", "use_language_action",
+                     "require_cache", "normalize_actions", "image_aug", "lap_subdir"):
+            if name in config.dataset:
+                params[name] = config.dataset[name] if name != "image_aug" else config.dataset[name] and not val
+        return LiberoMotusDataset(**params)
     if dataset_type != "robotwin":
         raise ValueError(
-            f"Unsupported dataset type {dataset_type!r}; this release supports only 'robotwin'."
+            f"Unsupported dataset type {dataset_type!r}; expected 'robotwin' or 'libero'."
         )
 
     from .robotwin2.robotwin_agilex_dataset import RobotWinTaskDataset
