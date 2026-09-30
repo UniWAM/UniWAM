@@ -1,8 +1,31 @@
 # UniWAM: Unified World-Action Model (OLA-SEM)
 
-This repository is the official implementation of UniWAM on RoboTwin. It
-employs three expert MoT models to jointly supervise physical language
-understanding, image generation, and action prediction.
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/Paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white" alt="Paper"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Project--Page-blue?style=for-the-badge&logo=homepage&logoColor=white" alt="Project Page"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Models-fcd022?style=for-the-badge&logo=huggingface&logoColor=white" alt="Models"></a>
+</p>
+
+
+## Overview
+
+<p align="center">
+  <a href="../../figure/uniwam_teaser.pdf">
+    <img src="../../figure/uniwam_teaser.jpg" alt="UniWAM teaser" width="100%">
+  </a>
+</p>
+
+UniWAM brings semantic understanding, visual prediction, and action generation into one MoT architecture. Its three experts exchange information through joint multimodal attention. During pretraining, physical-language supervision and complementary signals from robot, human egocentric, and VQA data build embodied knowledge. During post-training, future visual noise augmentation reduces reliance on precise future predictions, while encoded action history initializes action generation through flow matching. The repository provides the RoboTwin training and deployment workflow.
+
+
+
+## Key Features
+
+- **Unified world-action architecture:** A Mixture-of-Transformers (MoT) connects a physical reasoner, a world generator, and an action predictor through joint multimodal attention.
+- **Physical-language grounding:** Robot actions are represented in natural language, adapting the vision-language component to embodied tasks while retaining its language capabilities.
+- **Complementary multimodal supervision:** The pretraining recipe combines robot demonstrations, human egocentric data, and visual question answering (VQA) data to train the appropriate experts.
+- **Efficient action generation:** Future visual noise augmentation and history-conditioned flow matching support action generation with fewer denoising steps.
+
 
 
 
@@ -69,3 +92,14 @@ Coming soon.
 This repository is based on and modified from
 [Motus](https://github.com/thu-ml/Motus). We sincerely thank the Motus authors
 for their valuable open-source work and contribution to the community.
+
+## Citation
+
+The paper is not publicly available yet, so its author list and arXiv identifier are not available. We will update this section when the preprint is released. For now, this entry is a placeholder and should not be used as a final bibliographic citation:
+
+```bibtex
+@misc{uniwam,
+  title = {UniWAM: Unified World-Action Model},
+  note  = {Preprint citation details forthcoming}
+}
+```
