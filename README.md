@@ -7,7 +7,7 @@
 </p>
 
 
-## Overview
+## 📃 Overview
 
 <p align="center">
   <a href="uniwam_teaser.pdf">
@@ -18,7 +18,7 @@
 UniWAM brings semantic understanding, visual prediction, and action generation into one MoT architecture. Its three experts exchange information through joint multimodal attention. During pretraining, physical-language supervision and complementary signals from robot, human egocentric, and VQA data build embodied knowledge. During post-training, future visual noise augmentation reduces reliance on precise future predictions, while encoded action history initializes action generation through flow matching.
 
 
-## Key Features
+## 🌟 Key Features
 
 - **Unified world-action architecture:** A Mixture-of-Transformers (MoT) connects a physical reasoner, a world generator, and an action predictor through joint multimodal attention.
 - **Physical-language grounding:** Robot actions are represented in natural language, adapting the vision-language component to embodied tasks while retaining its language capabilities.
@@ -28,7 +28,7 @@ UniWAM brings semantic understanding, visual prediction, and action generation i
 
 
 
-## Contents
+## 📚 Contents
 
 - `models/`, `train/`, `utils/`, `bak/wan/`: physical language model and training runtime.
 - `data/robotwin2/`: RoboTwin loader and conversion utilities (code only).
@@ -38,7 +38,7 @@ UniWAM brings semantic understanding, visual prediction, and action generation i
 Bridge, DROID, Fractal, and real-world inference are intentionally out
 of scope for this release.
 
-## Installation
+## 🚀 Installation
 
 Python 3.10 and a CUDA-capable PyTorch installation are recommended. Install
 PyTorch for your CUDA version first, then install the remaining dependencies:
@@ -51,15 +51,18 @@ pip install flash-attn --no-build-isolation
 pip install -r requirements.txt
 ```
 
-## Model weights
+## 💾 Model weights
 
 ### Pretrained assets for training
 
 Standard training uses the following pretrained assets:
 
-- [Kosmos524/d0_v on ModelScope](https://www.modelscope.cn/models/Kosmos524/d0_v/files): initialization weights supervised on mixed robot datasets. Use these weights to initialize training or fine-tuning; they are not the released RoboTwin evaluation checkpoint.
-- [Wan-AI/Wan2.2-TI2V-5B on Hugging Face](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B): Wan video backbone, VAE, and UMT5 components.
-- [Qwen/Qwen3-VL-2B-Instruct on Hugging Face](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct): vision-language backbone.
+| Pretrained asset | Link | Fine-tuning data or role |
+| --- | --- | --- |
+| ` UniWAM` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) | Initialization weights supervised on mixed robot datasets. |
+| ` UniWAM-robotwin-clean` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) |  Thr post weights supervised on Robotwin 2.0 datasets. |
+| `Wan-AI/Wan2.2-TI2V-5B` | [Hugging Face](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B) | Video backbone, VAE.|
+| `Qwen/Qwen3-VL-2B-Instruct` | [Hugging Face](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct) | Vision-language backbone;. |
 
 Keep the downloaded directory structure as follows so that it matches the
 default paths in the training configs:
@@ -72,10 +75,9 @@ pretrained_models/
     └── Wan2.2_VAE.pth
 ```
 
-`d0_v` is the normal training initialization. Point the training
-fine-tuning checkpoint setting at `pretrained_models/d0_v/`.
 
-## Post-training
+
+## 🚀 Post-training
 
 ### RoboTwin
 
@@ -86,13 +88,13 @@ for data preparation, training, and inference.
 
 Coming soon.
 
-## Acknowledgements
+## ❤️ Acknowledgements
 
 This repository is based on and modified from
 [Motus](https://github.com/thu-ml/Motus). We sincerely thank the Motus authors
 for their valuable open-source work and contribution to the community.
 
-## Citation
+## 🖊 Citation
 
 
 ```bibtex
