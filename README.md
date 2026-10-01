@@ -88,9 +88,7 @@ for data preparation, training, and inference.
 ### LIBERO
 
 See the [LIBERO guide](docs/libero/README.md) for original LIBERO training and
-separate original LIBERO / LIBERO-plus evaluation. LIBERO-plus training is not
-included. Benchmark environments, datasets, pretrained assets, and checkpoints
-are supplied separately by users.
+separate original LIBERO / LIBERO-plus evaluation. 
 
 ## ❤️ Acknowledgements
 
