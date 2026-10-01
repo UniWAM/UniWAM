@@ -31,10 +31,6 @@ DATASET_DIR=/path/to/libero_official_lerobot \
   bash scripts/libero/train_libero.sh
 ```
 
-For a quick check, pass `--suites libero_goal --max-episodes 2` and use a separate output directory. The official recorder stores each observation after executing the same-index action, so the converter pairs that observation with the **next** action and drops the last frame. It also flips the raw camera images by 180° to match evaluation, converts gripper `-1/+1` to policy `1/0` when needed, and preserves all recorded timesteps. It does **not** reproduce the no-op removal or exact episode selection of the IPEC-COMMUNITY release; training results from the two preparations are not directly identical. The converter needs `h5py`, `pyarrow`, and PyAV with H.264 encoding.
-
-The converter was tested on two episodes from an official LIBERO HDF5 file: 174 output frames, with action/state alignment and video counts checked against the source. Run a small conversion on your own download before converting all four suites.
-
 Alternatively, use an existing four-suite LeRobot v2.1 conversion under one parent:
 
 ```text
@@ -47,13 +43,6 @@ data/libero_dataset/
 
 The official converter above writes the same layout with the shorter child names `libero_10/`, `libero_goal/`, `libero_object/`, and `libero_spatial/`.
 
-Each suite needs `meta/info.json`, `meta/tasks.jsonl`, `meta/episodes.jsonl`,
-`data/chunk-*/episode_*.parquet`, and the two camera videos under
-`videos/chunk-*/observation.images.image/` and
-`videos/chunk-*/observation.images.wrist_image/`. This loader expects 20 Hz,
-8D state, and 7D raw-OSC actions. It will reject incompatible datasets.
-The original benchmark's environment assets alone are not a training dataset;
-users must supply data in this format or use the official HDF5 converter above.
 
 Download the Wan2.2-TI2V-5B and Qwen3-VL-2B-Instruct weights listed in the
 root README to `pretrained_models/`. The optional UniWAM initialization
