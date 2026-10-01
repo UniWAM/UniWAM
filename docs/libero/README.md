@@ -21,8 +21,7 @@ supported via `--libero-plus-python`.
 
 ## Original LIBERO training
 
-For the [official LIBERO HDF5 demonstrations](https://huggingface.co/datasets/yifengzhu-hf/LIBERO-datasets), first download the four directories `libero_10`, `libero_goal`, `libero_object`, and `libero_spatial` using [LIBERO's download instructions](https://github.com/Lifelong-Robot-Learning/LIBERO#datasets). Convert them into a **new** directory (the converter refuses to overwrite an existing suite). This produces the minimal v2.1-style layout required by this repository's loader, not a fully populated general-purpose LeRobot release:
-
+For the [official LIBERO HDF5 demonstrations](https://huggingface.co/datasets/yifengzhu-hf/LIBERO-datasets), first download the four directories `libero_10`, `libero_goal`, `libero_object`, and `libero_spatial` using [LIBERO's download instructions](https://github.com/Lifelong-Robot-Learning/LIBERO#datasets). Convert them into a **new** directory (the converter refuses to overwrite an existing suite). 
 ```bash
 python -m scripts.libero.convert_official_libero \
   --source /path/to/official/LIBERO-datasets \
