@@ -4,7 +4,7 @@ This repository trains on the **original LIBERO** four-suite demonstrations,
 using either the official HDF5 files converted below or a compatible LeRobot
 v2.1 dataset. It evaluates a trained checkpoint on either
 [LIBERO](https://github.com/Lifelong-Robot-Learning/LIBERO) or
-[LIBERO-plus](https://github.com/sylvestf/LIBERO-plus). LIBERO-plus training is not included. No benchmark environment, dataset, pretrained model, or
+[LIBERO-plus](https://github.com/sylvestf/LIBERO-plus). No benchmark environment, dataset, pretrained model, or
 checkpoint is bundled here.
 
 ## Install
@@ -71,9 +71,7 @@ The training script also prepares any missing cache automatically; the first
 run can take time. Set `CACHE_DIR` to move action statistics, LAP text, and T5
 embeddings elsewhere. Set `NPROC_PER_NODE` to select the GPU count, `WAN_PATH`
 to the parent directory containing `Wan2.2-TI2V-5B`, and `CONFIG_FILE` to use
-another config. The default recipe is 40k steps, 16-action horizon, history
-action initialization, and future-video noise augmentation. Outputs go under
-`checkpoints/` and `tensorboard_logs/`.
+another config. 
 
 ## Evaluation
 
@@ -97,13 +95,5 @@ bash scripts/libero/eval_libero.sh \
 ```
 
 The two benchmarks share the policy server but use separately installed
-environments, checkpoints, and normalization statistics. The checkpoint may be
-the `.pt` file or the `pytorch_model` directory containing it, not the model
-repository root. LIBERO-plus requires an explicit `--action-stats` pointing to
-the matching JSON at the model repository root. Use `--task all` for all four suites. Original
-LIBERO defaults to 50 trials per task; LIBERO-plus defaults to one. Override
-with `--num-trials` when needed. Set `--motus-python` and
-`--libero-plus-python` if the model and benchmark use different environments.
-`--wan-path` points to the Wan2.2-TI2V-5B directory (not its parent), and
-`--vlm-path` points to Qwen3-VL-2B-Instruct. Evaluation logs and results are
-written under `outputs/`.
+environments, checkpoints, and normalization statistics.  Use `--task all` for all four suites. Original
+LIBERO defaults to 50 trials per task; LIBERO-plus defaults to one. 
