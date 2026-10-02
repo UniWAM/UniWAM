@@ -60,8 +60,8 @@ Standard training uses the following pretrained assets:
 
 | Pretrained asset | Link | Fine-tuning data or role |
 | --- | --- | --- |
-| ` UniWAM-base` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) | Initialization weights supervised on mixed robot datasets. |
-| ` UniWAM-robotwin-clean` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) |  Thr post weights supervised on Robotwin 2.0 datasets. |
+| ` UniWAM-base` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) | pretained on mixed robot,human and VQA datasets. |
+| ` UniWAM-robotwin-clean` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) |post-trained on the clean subset of RoboTwin 2.0. |
 | `Wan-AI/Wan2.2-TI2V-5B` | [Hugging Face](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B) | Video backbone, VAE.|
 | `Qwen/Qwen3-VL-2B-Instruct` | [Hugging Face](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct) | Vision-language backbone;. |
 
