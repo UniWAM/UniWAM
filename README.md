@@ -1,9 +1,9 @@
-# UniWAM: Unified World-Action Model (OLA-SEM)
+# UniWAM: Unified World-Action Model
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white" alt="Paper"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Project--Page-blue?style=for-the-badge&logo=homepage&logoColor=white" alt="Project Page"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Models-fcd022?style=for-the-badge&logo=huggingface&logoColor=white" alt="Models"></a>
+  <a href="https://uniwam.github.io"><img src="https://img.shields.io/badge/Project--Page-blue?style=for-the-badge&logo=homepage&logoColor=white" alt="Project Page"></a>
+  <a href="https://www.modelscope.cn/collections/Kosmos524/UniWAM"><img src="https://img.shields.io/badge/Models-fcd022?style=for-the-badge&logo=huggingface&logoColor=white" alt="Models"></a>
 </p>
 
 
@@ -102,6 +102,8 @@ for their valuable open-source work and contribution to the community.
 ```bibtex
 @misc{uniwam,
   title = {UniWAM: Unified World-Action Model},
-  note  = {Preprint citation details forthcoming}
+  author={Chen, Jiayi and Song, Wenxuan and Wang, Jingbo and Zhou, Shuai and Gong, Xicheng and Fan, Zehua and Zhou, Ziyang and E, Junwu and Yan, Haodong and Li, Fuhao and Yu, Qize and Huang, Xu and Wang, Pengwei and Chen, Wen and Zhou, Shunbo and Li, Haoang},
+  journal={arXiv preprint arXiv:2610.02054},
+  year={2026}
 }
 ```
