@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="uniwam_teaser.pdf">
-    <img src="uniwam_teaser.jpg" alt="UniWAM teaser" width="100%">
+    <img src="uniwam_teaser.png" alt="UniWAM teaser" width="100%">
   </a>
 </p>
 
