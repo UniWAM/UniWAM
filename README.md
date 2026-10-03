@@ -15,7 +15,8 @@
   </a>
 </p>
 
-UniWAM brings semantic understanding, visual prediction, and action generation into one MoT architecture. Its three experts exchange information through joint multimodal attention. During pretraining, physical-language supervision and complementary signals from robot, human egocentric, and VQA data build embodied knowledge. During post-training, future visual noise augmentation reduces reliance on precise future predictions, while encoded action history initializes action generation through flow matching.
+UniWAM is an 8B-parameter model that brings semantic understanding, visual prediction, and action generation into one MoT architecture. Its three experts exchange information through joint multimodal attention. During pretraining, physical-language supervision and complementary signals from robot, human egocentric, and VQA data build embodied knowledge. During post-training, future visual noise augmentation reduces reliance on precise future predictions, while encoded action history initializes action generation through flow matching.
+
 
 
 ## 🌟 Key Features
@@ -24,6 +25,7 @@ UniWAM brings semantic understanding, visual prediction, and action generation i
 - **Physical-language grounding:** Robot actions are represented in natural language, adapting the vision-language component to embodied tasks while retaining its language capabilities.
 - **Complementary multimodal supervision:** The pretraining recipe combines robot demonstrations, human egocentric data, and visual question answering (VQA) data to train the appropriate experts.
 - **Efficient action generation:** Future visual noise augmentation and history-conditioned flow matching support action generation with fewer denoising steps.
+- **Efficiency:** Post-training on RoboTwin 2.0 takes 10 hours on 8 NVIDIA H100 GPUs.
 
 
 ## 📚 Contents
