@@ -26,8 +26,6 @@ UniWAM brings semantic understanding, visual prediction, and action generation i
 - **Efficient action generation:** Future visual noise augmentation and history-conditioned flow matching support action generation with fewer denoising steps.
 
 
-
-
 ## 📚 Contents
 
 - `models/`, `train/`, `utils/`, `bak/wan/`: physical language model and training runtime.
@@ -60,8 +58,8 @@ Standard training uses the following pretrained assets:
 
 | Pretrained asset | Link | Fine-tuning data or role |
 | --- | --- | --- |
-| ` UniWAM-base` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) | pretained on mixed robot,human and VQA datasets. |
-| ` UniWAM-robotwin-clean` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) |post-trained on the clean subset of RoboTwin 2.0. |
+| ` UniWAM-base` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) | pretained checkpoint on mixed robot,human and VQA datasets. |
+| ` UniWAM-robotwin-clean` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) |post-trained checkpoint on the clean subset of RoboTwin 2.0. |
 | `Wan-AI/Wan2.2-TI2V-5B` | [Hugging Face](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B) | Video backbone, VAE.|
 | `Qwen/Qwen3-VL-2B-Instruct` | [Hugging Face](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct) | Vision-language backbone;. |
 
@@ -89,12 +87,6 @@ for data preparation, training, and inference.
 
 See the [LIBERO guide](docs/libero/README.md) for original LIBERO training and
 separate original LIBERO / LIBERO-plus evaluation. 
-
-## ❤️ Acknowledgements
-
-This repository is based on and modified from
-[Motus](https://github.com/thu-ml/Motus). We sincerely thank the Motus authors
-for their valuable open-source work and contribution to the community.
 
 ## 🖊 Citation
 
