@@ -3,7 +3,8 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2610.02054"><img src="https://img.shields.io/badge/Paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white" alt="Paper"></a>
   <a href="https://uniwam.github.io"><img src="https://img.shields.io/badge/Project--Page-blue?style=for-the-badge&logo=homepage&logoColor=white" alt="Project Page"></a>
-  <a href="https://www.modelscope.cn/collections/Kosmos524/UniWAM"><img src="https://img.shields.io/badge/Models-fcd022?style=for-the-badge&logo=huggingface&logoColor=white" alt="Models"></a>
+  <a href="https://www.modelscope.cn/collections/Kosmos524/UniWAM"><img src="https://img.shields.io/badge/ModelScope-6858FF?style=for-the-badge&logo=modelscope&logoColor=white" alt="ModelScope"></a>
+  <a href="https://huggingface.co/collections/chenpyyy/uniwam"><img src="https://img.shields.io/badge/Hugging_Face-yellow?style=for-the-badge&logo=huggingface&logoColor=white" alt="Hugging Face"></a>
 </p>
 
 
@@ -60,8 +61,8 @@ Standard training uses the following pretrained assets:
 
 | Pretrained asset | Link | Fine-tuning data or role |
 | --- | --- | --- |
-| ` UniWAM-base` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) | pretained checkpoint on mixed robot,human and VQA datasets. |
-| ` UniWAM-robotwin-clean` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) |post-trained checkpoint on the clean subset of RoboTwin 2.0. |
+| ` UniWAM-base` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) / [Hugging Face](https://huggingface.co/collections/chenpyyy/uniwam) | pretained checkpoint on mixed robot,human and VQA datasets. |
+| ` UniWAM-robotwin-clean` | [ModelScope](https://www.modelscope.cn/collections/Kosmos524/UniWAM) / [Hugging Face](https://huggingface.co/collections/chenpyyy/uniwam) |post-trained checkpoint on the clean subset of RoboTwin 2.0. |
 | `Wan-AI/Wan2.2-TI2V-5B` | [Hugging Face](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B) | Video backbone, VAE.|
 | `Qwen/Qwen3-VL-2B-Instruct` | [Hugging Face](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct) | Vision-language backbone;. |
 
