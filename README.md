@@ -5,6 +5,7 @@
   <a href="https://uniwam.github.io"><img src="https://img.shields.io/badge/Project--Page-blue?style=for-the-badge&logo=homepage&logoColor=white" alt="Project Page"></a>
   <a href="https://www.modelscope.cn/collections/Kosmos524/UniWAM"><img src="https://img.shields.io/badge/ModelScope-6858FF?style=for-the-badge&logo=modelscope&logoColor=white" alt="ModelScope"></a>
   <a href="https://huggingface.co/collections/chenpyyy/uniwam"><img src="https://img.shields.io/badge/Hugging_Face-yellow?style=for-the-badge&logo=huggingface&logoColor=white" alt="Hugging Face"></a>
+  <a href="https://paperswithcode.com/sota/imitation-learning-on-libero-plus-sft"><img src="https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/uniwam/unified-world-action-model-with-a-human/sota-on-libero-plus-sft" alt="Papers with Code: SOTA on LIBERO-Plus (SFT)"></a>
 </p>
 
 
