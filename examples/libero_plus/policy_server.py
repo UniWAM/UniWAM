@@ -28,6 +28,7 @@ BAK_ROOT = str((ROOT / "bak").resolve())
 if BAK_ROOT not in sys.path:
     sys.path.insert(0, BAK_ROOT)
 from wan.modules.t5 import T5EncoderModel  # noqa: E402
+from wan.utils.device import get_default_device  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -40,11 +41,12 @@ class LiberoMotusPolicy:
         wan_path: str,
         vlm_path: str,
         action_stats_path: str | None = None,
-        device: str = "cuda",
+        device: str | None = None,
         num_inference_steps: int | None = None,
+        t5_device: str | None = None,
     ) -> None:
-        self.device = torch.device(device)
-        self.dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
+        self.device = torch.device(device) if device else get_default_device()
+        self.dtype = torch.bfloat16 if self.device.type != "cpu" else torch.float32
         self.wan_path = str(Path(wan_path).resolve())
         self.vlm_path = str(Path(vlm_path).resolve())
         with open(config_path, "r", encoding="utf-8") as handle:
@@ -78,10 +80,13 @@ class LiberoMotusPolicy:
                 "execution_horizon must be positive and no greater than the prediction horizon"
             )
 
+        # The T5 encoder runs once per request and may sit on another device
+        # (for example the CPU) when the main GPU is too small for both.
+        self.t5_device = torch.device(t5_device) if t5_device else self.device
         self.t5_encoder = T5EncoderModel(
             text_len=512,
             dtype=self.dtype,
-            device=str(self.device),
+            device=str(self.t5_device),
             checkpoint_path=os.path.join(self.wan_path, "models_t5_umt5-xxl-enc-bf16.pth"),
             tokenizer_path=os.path.join(self.wan_path, "google", "umt5-xxl"),
         )
@@ -133,6 +138,7 @@ class LiberoMotusPolicy:
             load_pretrained_backbones=False,
             vlm_frozen=False,
             training_mode="finetune",
+            device=str(self.device),
         )
 
     def _prepare_observation(self, example: Dict[str, Any]) -> tuple[torch.Tensor, torch.Tensor, str]:
@@ -237,14 +243,18 @@ class LiberoMotusPolicy:
         if request_seed is None:
             return self._predict_action_with_current_rng(request)
 
-        cuda_devices = []
-        if self.device.type == "cuda":
-            cuda_devices = [
+        gpu_devices = []
+        if self.device.type in ("cuda", "xpu"):
+            gpu = getattr(torch, self.device.type)
+            gpu_devices = [
                 self.device.index
                 if self.device.index is not None
-                else torch.cuda.current_device()
+                else gpu.current_device()
             ]
-        with torch.random.fork_rng(devices=cuda_devices):
+        with torch.random.fork_rng(
+            devices=gpu_devices,
+            device_type=self.device.type if gpu_devices else "cuda",
+        ):
             torch.manual_seed(int(request_seed))
             return self._predict_action_with_current_rng(request)
 
@@ -257,7 +267,7 @@ class LiberoMotusPolicy:
         frame, state, instruction = self._prepare_observation(example)
         action_source = self._prepare_action_source(example)
         with torch.no_grad():
-            t5 = self.t5_encoder([instruction], str(self.device))
+            t5 = self.t5_encoder([instruction], str(self.t5_device))
             if isinstance(t5, torch.Tensor):
                 t5 = [t5.squeeze(0) if t5.ndim == 3 else t5]
             _, actions = self.model.inference_step(
@@ -306,6 +316,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=9883)
     parser.add_argument("--num-inference-steps", type=int, default=None)
+    parser.add_argument(
+        "--device",
+        default=None,
+        help="cuda, xpu or cpu (default: CUDA, then XPU, then CPU, whichever is available)",
+    )
+    parser.add_argument(
+        "--t5-device",
+        default=None,
+        help="device of the T5 text encoder (default: --device); cpu frees GPU memory",
+    )
     return parser.parse_args()
 
 
@@ -318,6 +338,8 @@ def main() -> None:
         vlm_path=args.vlm_path,
         action_stats_path=args.action_stats,
         num_inference_steps=args.num_inference_steps,
+        device=args.device,
+        t5_device=args.t5_device,
     )
     PolicyServer(policy, host=args.host, port=args.port).serve_forever()
 

@@ -20,6 +20,7 @@ if str(bak_root.resolve()) not in sys.path:
     sys.path.insert(0, str(bak_root.resolve()))
 
 from wan.modules.attention import flash_attention
+from wan.utils.device import device_autocast
 from wan.modules.model import WanRMSNorm, WanLayerNorm, sinusoidal_embedding_1d, rope_apply
 
 logger = logging.getLogger(__name__)
@@ -298,7 +299,7 @@ class ActionDecoder(nn.Module):
             Action predictions [B, chunk_size, action_dim]
         """
         # WAN Head-style modulation using time_emb
-        with torch.amp.autocast('cuda', dtype=torch.float32):
+        with device_autocast(x.device.type, torch.float32):
             e0, e1 = (self.modulation.unsqueeze(0) + time_emb.unsqueeze(2)).chunk(2, dim=2)
         z = self.norm(x) * (1 + e1.squeeze(2)) + e0.squeeze(2)
         return self.action_head(z)

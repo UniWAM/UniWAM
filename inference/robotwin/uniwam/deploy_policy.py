@@ -31,6 +31,7 @@ if BAK_ROOT not in sys.path:
     sys.path.insert(0, BAK_ROOT)
 
 from wan.modules.t5 import T5EncoderModel
+from wan.utils.device import get_default_device
 from utils.image_utils import resize_with_padding
 
 logger = logging.getLogger(__name__)
@@ -204,6 +205,7 @@ class UniWAMPolicy:
             # Don't load pretrained backbones - will load full model from checkpoint
             load_pretrained_backbones=False,
             training_mode='finetune',
+            device=self.device,
         )
 
         return config
@@ -516,7 +518,7 @@ def get_model(usr_args):
     policy_dir = Path(__file__).parent
     config_path = policy_dir / "utils" / "robotwin.yml"
     
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = str(get_default_device())
     
     policy = UniWAMPolicy(
         checkpoint_path=checkpoint_path,

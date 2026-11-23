@@ -6,6 +6,7 @@ import torch.nn as nn
 from diffusers.configuration_utils import ConfigMixin, register_to_config
 from diffusers.models.modeling_utils import ModelMixin
 
+from ..utils.device import device_autocast
 from .attention import flash_attention
 
 __all__ = ['WanModel']
@@ -404,7 +405,7 @@ class Head(nn.Module):
             e(Tensor): Shape [B, L1, C]
         """
         assert e.dtype == torch.float32
-        with torch.amp.autocast('cuda', dtype=torch.float32):
+        with device_autocast(x.device.type, torch.float32):
             e = (self.modulation.unsqueeze(0) + e.unsqueeze(2)).chunk(2, dim=2)
             x = (
                 self.head(

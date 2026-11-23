@@ -33,6 +33,7 @@ Options:
   --wan-path PATH            WAN model directory
   --vlm-path PATH            Qwen3-VL model directory
   --action-stats PATH        Raw OSC action statistics (required for plus)
+  --t5-device DEVICE         T5 text encoder device, e.g. cpu (default: the policy device)
   --server-wait-seconds N    server startup timeout (default: 600)
   --tail-lines N             log lines printed on failure (default: 120)
   --help, -h                 show this help
@@ -68,6 +69,7 @@ MOTUS_PYTHON="${MOTUS_PYTHON:-python}"
 LIBERO_PLUS_PYTHON="${LIBERO_PLUS_PYTHON:-python}"
 WAN_PATH="${WAN_PATH:-${MOTUS_ROOT}/pretrained_models/Wan2.2-TI2V-5B}"
 VLM_PATH="${VLM_PATH:-${MOTUS_ROOT}/pretrained_models/Qwen3-VL-2B-Instruct}"
+T5_DEVICE="${T5_DEVICE:-}"
 ACTION_STATS="${ACTION_STATS:-}"
 ACTION_STATS_FLAG=0
 LIBERO_PLUS_ROOT="${LIBERO_PLUS_ROOT:-}"
@@ -99,6 +101,7 @@ while [[ $# -gt 0 ]]; do
         --wan-path) WAN_PATH="$2"; shift 2 ;;
         --vlm-path) VLM_PATH="$2"; shift 2 ;;
         --action-stats) ACTION_STATS="$2"; ACTION_STATS_FLAG=1; shift 2 ;;
+        --t5-device) T5_DEVICE="$2"; shift 2 ;;
         --server-wait-seconds) SERVER_WAIT_SECONDS="$2"; shift 2 ;;
         --tail-lines) TAIL_LINES="$2"; shift 2 ;;
         --help|-h) usage; exit 0 ;;
@@ -218,6 +221,10 @@ action_stats_args=()
 if [[ -n "${ACTION_STATS}" ]]; then
     action_stats_args=(--action-stats "${ACTION_STATS}")
 fi
+t5_device_args=()
+if [[ -n "${T5_DEVICE}" ]]; then
+    t5_device_args=(--t5-device "${T5_DEVICE}")
+fi
 
 (
     cd "${MOTUS_ROOT}"
@@ -231,6 +238,7 @@ fi
         --wan-path "${WAN_PATH}" \
         --vlm-path "${VLM_PATH}" \
         "${action_stats_args[@]}" \
+        "${t5_device_args[@]}" \
         --num-inference-steps "${NUM_INFERENCE_STEPS}" \
         --port "${PORT}"
 ) >"${SERVER_LOG}" 2>&1 &
