@@ -139,7 +139,13 @@ class WanLayerNorm(nn.LayerNorm):
         Args:
             x(Tensor): Shape [B, L, C]
         """
-        return super().forward(x.float()).type_as(x)
+        # Use float32 weights with the float32 input. CUDA and XPU autocast run
+        # layer_norm in float32 already; CPU autocast does not, and a float32
+        # input with bf16 weights fails there.
+        weight = self.weight.float() if self.weight is not None else None
+        bias = self.bias.float() if self.bias is not None else None
+        return nn.functional.layer_norm(
+            x.float(), self.normalized_shape, weight, bias, self.eps).type_as(x)
 
 
 class WanSelfAttention(nn.Module):
