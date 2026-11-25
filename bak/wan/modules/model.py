@@ -6,6 +6,7 @@ import torch.nn as nn
 from diffusers.configuration_utils import ConfigMixin, register_to_config
 from diffusers.models.modeling_utils import ModelMixin
 
+from ..utils.device import device_autocast
 from .attention import flash_attention
 
 __all__ = ['WanModel']
@@ -138,7 +139,13 @@ class WanLayerNorm(nn.LayerNorm):
         Args:
             x(Tensor): Shape [B, L, C]
         """
-        return super().forward(x.float()).type_as(x)
+        # Use float32 weights with the float32 input. CUDA and XPU autocast run
+        # layer_norm in float32 already; CPU autocast does not, and a float32
+        # input with bf16 weights fails there.
+        weight = self.weight.float() if self.weight is not None else None
+        bias = self.bias.float() if self.bias is not None else None
+        return nn.functional.layer_norm(
+            x.float(), self.normalized_shape, weight, bias, self.eps).type_as(x)
 
 
 class WanSelfAttention(nn.Module):
@@ -404,7 +411,7 @@ class Head(nn.Module):
             e(Tensor): Shape [B, L1, C]
         """
         assert e.dtype == torch.float32
-        with torch.amp.autocast('cuda', dtype=torch.float32):
+        with device_autocast(x.device.type, torch.float32):
             e = (self.modulation.unsqueeze(0) + e.unsqueeze(2)).chunk(2, dim=2)
             x = (
                 self.head(

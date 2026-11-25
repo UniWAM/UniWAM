@@ -3,6 +3,8 @@ import logging
 
 import torch
 import torch.cuda.amp as amp
+
+from ..utils.device import device_autocast
 import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
@@ -1022,14 +1024,14 @@ class Wan2_2_VAE:
             ).eval().requires_grad_(False).to(device))
 
     def encode(self, videos):
-        with torch.amp.autocast("cuda", dtype=self.dtype):
-            return self.model.encode(videos, self.scale)
+        with device_autocast(videos.device.type, self.dtype):
+            return self.model.encode(videos.to(self.dtype), self.scale)
 
     def decode(self, zs):
         try:
             if not isinstance(zs, list):
                 raise TypeError("zs should be a list")
-            with amp.autocast(dtype=self.dtype):
+            with device_autocast(zs[0].device.type, self.dtype):
                 return [
                     self.model.decode(u.unsqueeze(0),
                                       self.scale).float().clamp_(-1,

@@ -51,7 +51,12 @@ def flash_attention(
     """
     half_dtypes = (torch.float16, torch.bfloat16)
     assert dtype in half_dtypes
-    assert q.device.type == 'cuda' and q.size(-1) <= 256
+    if q.device.type != 'cuda' or not (FLASH_ATTN_2_AVAILABLE or
+                                       FLASH_ATTN_3_AVAILABLE):
+        return _sdpa_attention(q, k, v, q_lens, k_lens, dropout_p,
+                               softmax_scale, q_scale, causal, window_size,
+                               dtype)
+    assert q.size(-1) <= 256
 
     # params
     b, lq, lk, out_dtype = q.size(0), q.size(1), k.size(1), q.dtype
@@ -127,6 +132,43 @@ def flash_attention(
             deterministic=deterministic).unflatten(0, (b, lq))
 
     # output
+    return x.type(out_dtype)
+
+
+def _sdpa_attention(q, k, v, q_lens, k_lens, dropout_p, softmax_scale, q_scale,
+                    causal, window_size, dtype):
+    """flash_attention computed with PyTorch SDPA, for devices without flash-attn.
+
+    Same inputs, outputs and dtype handling as flash_attention. Keys at or past
+    k_lens are masked out; query rows at or past q_lens are returned as zeros.
+    """
+    if causal or tuple(window_size) != (-1, -1):
+        raise NotImplementedError(
+            'causal and sliding window attention need flash-attn on CUDA')
+    half_dtypes = (torch.float16, torch.bfloat16)
+    out_dtype = q.dtype
+
+    def half(x):
+        return x if x.dtype in half_dtypes else x.to(dtype)
+
+    q, k, v = half(q), half(k), half(v)
+    q = q.to(v.dtype)
+    k = k.to(v.dtype)
+    if q_scale is not None:
+        q = q * q_scale
+
+    attn_mask = None
+    if k_lens is not None:
+        key_ids = torch.arange(k.size(1), device=k.device)
+        attn_mask = (key_ids[None, :] < k_lens.to(k.device)[:, None])[:, None, None, :]
+
+    x = torch.nn.functional.scaled_dot_product_attention(
+        q.transpose(1, 2), k.transpose(1, 2), v.transpose(1, 2),
+        attn_mask=attn_mask, dropout_p=dropout_p, scale=softmax_scale).transpose(1, 2)
+
+    if q_lens is not None:
+        query_ids = torch.arange(q.size(1), device=q.device)
+        x = x * (query_ids[None, :] < q_lens.to(q.device)[:, None])[:, :, None, None].to(x.dtype)
     return x.type(out_dtype)
 
 

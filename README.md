@@ -56,6 +56,34 @@ pip install flash-attn --no-build-isolation
 pip install -r requirements.txt
 ```
 
+### Run on Intel GPU (XPU)
+
+Inference (the LIBERO policy server and the RoboTwin policy) also runs on Intel
+GPUs with the XPU build of PyTorch. Install PyTorch for XPU instead of the CUDA
+build and skip flash-attn: attention then uses PyTorch SDPA.
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/xpu
+pip install -r requirements.txt
+```
+
+The device is picked automatically (CUDA, then XPU, then CPU), so the commands
+in the guides below run unchanged; the LIBERO policy server also accepts
+`--device xpu`, and it uses the first XPU (`--gpu-id` selects CUDA devices
+only). When the model and the T5 text encoder do not fit on one GPU together,
+keep the T5 encoder on the CPU, and give it more CPU threads than the one the
+evaluation script sets by default:
+
+```bash
+OMP_NUM_THREADS=16 bash scripts/libero/eval_libero.sh --t5-device cpu \
+  --checkpoint /path/to/UniWAM-libero/pytorch_model \
+  --benchmark-mode original --task libero_goal --max-tasks 1 --num-trials 1 \
+  --action-stats /path/to/UniWAM-libero/raw_osc_action_stats.json
+```
+
+Training, flash-attn and the GPU auto-detection of the RoboTwin batch scripts
+(`nvidia-smi`) stay CUDA-only.
+
 ## 💾 Model weights
 
 ### Pretrained assets for training
